@@ -33,8 +33,28 @@ The plugin does not set any keymaps. Example using lazy.nvim:
     dependencies = { "nvim-telescope/telescope.nvim" },
     opts = {},
     keys = {
-        { "gO", function() require("elm-toolbox").document_symbols() end, desc = "Elm document symbols" },
-        { "gW", function() require("elm-toolbox").workspace_symbols() end, desc = "Elm workspace symbols" },
+        {
+            "gO",
+            function()
+                if vim.bo.filetype == "elm" then
+                    require("elm-toolbox").document_symbols()
+                else
+                    require("telescope.builtin").lsp_document_symbols()
+                end
+            end,
+            desc = "Document symbols",
+        },
+        {
+            "gW",
+            function()
+                if vim.bo.filetype == "elm" then
+                    require("elm-toolbox").workspace_symbols()
+                else
+                    require("telescope.builtin").lsp_workspace_symbols()
+                end
+            end,
+            desc = "Workspace symbols",
+        },
     },
 }
 ```
